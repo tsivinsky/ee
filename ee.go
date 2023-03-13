@@ -12,6 +12,10 @@ type EventEmitter struct {
 }
 
 func (emitter *EventEmitter) On(event string, handler EventHandler) {
+	if emitter.events == nil {
+		emitter.events = make(map[string][]EventHandler)
+	}
+
 	if emitter.events[event] == nil {
 		emitter.events[event] = []EventHandler{}
 	}
