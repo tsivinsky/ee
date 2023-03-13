@@ -16,10 +16,6 @@ func (emitter *EventEmitter) On(event string, handler EventHandler) {
 		emitter.events = make(map[string][]EventHandler)
 	}
 
-	if emitter.events[event] == nil {
-		emitter.events[event] = []EventHandler{}
-	}
-
 	emitter.events[event] = append(emitter.events[event], handler)
 }
 
