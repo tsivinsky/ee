@@ -29,3 +29,17 @@ func main() {
     e.Emit("message", "Hello, World!")
 }
 ```
+
+### Remove registered event
+
+```go
+package main
+
+func main() {
+    e := ee.New()
+
+    e.On("message", func(data ..any) {})
+
+    e.Remove("message")
+}
+```

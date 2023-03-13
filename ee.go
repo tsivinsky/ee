@@ -32,6 +32,16 @@ func (emitter *EventEmitter) Emit(event string, data ...any) error {
 	return nil
 }
 
+func (emitter *EventEmitter) Remove(event string) error {
+	if _, ok := emitter.events[event]; !ok {
+		return errors.New(fmt.Sprintf("\"%s\" event does not exist. Register it with ee.On(\"%s\", handler)", event, event))
+	}
+
+	delete(emitter.events, event)
+
+	return nil
+}
+
 func New() *EventEmitter {
 	return &EventEmitter{
 		events: make(map[string][]EventHandler),
