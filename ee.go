@@ -11,6 +11,8 @@ type EventEmitter struct {
 	events map[string][]EventHandler
 }
 
+// On subscribes handler to event and returns index of handler
+// It also creates internal events map if struct wasn't initialized
 func (emitter *EventEmitter) On(event string, handler EventHandler) int {
 	if emitter.events == nil {
 		emitter.events = make(map[string][]EventHandler)
@@ -22,6 +24,7 @@ func (emitter *EventEmitter) On(event string, handler EventHandler) int {
 	return index
 }
 
+// Emit calls all handlers subscribed to event and returns error if event doesn't exist in map
 func (emitter *EventEmitter) Emit(event string, data ...any) error {
 	handlers, ok := emitter.events[event]
 	if !ok {
@@ -35,6 +38,7 @@ func (emitter *EventEmitter) Emit(event string, data ...any) error {
 	return nil
 }
 
+// Remove deletes event and returns error if event doesn't exist
 func (emitter *EventEmitter) Remove(event string) error {
 	if _, ok := emitter.events[event]; !ok {
 		return errors.New(fmt.Sprintf("\"%s\" event does not exist. Register it with ee.On(\"%s\", handler)", event, event))
@@ -45,6 +49,7 @@ func (emitter *EventEmitter) Remove(event string) error {
 	return nil
 }
 
+// Off unsubscribes handler from event and returns error if event doesn't exist
 func (emitter *EventEmitter) Off(event string, index int) error {
 	if _, ok := emitter.events[event]; !ok {
 		return errors.New(fmt.Sprintf("\"%s\" event does not exist. Register it with ee.On(\"%s\", handler)", event, event))
@@ -55,6 +60,7 @@ func (emitter *EventEmitter) Off(event string, index int) error {
 	return nil
 }
 
+// New initializes new EventEmitter and returns pointer to it
 func New() *EventEmitter {
 	return &EventEmitter{
 		events: make(map[string][]EventHandler),
