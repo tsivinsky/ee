@@ -45,6 +45,16 @@ func (emitter *EventEmitter) Remove(event string) error {
 	return nil
 }
 
+func (emitter *EventEmitter) Off(event string, index int) error {
+	if _, ok := emitter.events[event]; !ok {
+		return errors.New(fmt.Sprintf("\"%s\" event does not exist. Register it with ee.On(\"%s\", handler)", event, event))
+	}
+
+	emitter.events[event] = append(emitter.events[event][:index], emitter.events[event][index+1:]...)
+
+	return nil
+}
+
 func New() *EventEmitter {
 	return &EventEmitter{
 		events: make(map[string][]EventHandler),
