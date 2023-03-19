@@ -21,6 +21,7 @@ type EventEmitter struct {
 // It also creates internal events map if struct wasn't initialized
 func (emitter *EventEmitter) On(event string, handlerFunc EventHandlerFunc) int {
 	if emitter.events == nil {
+		emitter.lastId = 0
 		emitter.events = make(map[string][]EventHandler)
 	}
 
