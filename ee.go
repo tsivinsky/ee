@@ -13,6 +13,7 @@ type EventHandler struct {
 }
 
 type EventEmitter struct {
+	lastId int
 	events map[string][]EventHandler
 }
 
@@ -24,11 +25,12 @@ func (emitter *EventEmitter) On(event string, handlerFunc EventHandlerFunc) int 
 	}
 
 	handler := EventHandler{
-		Id:   len(emitter.events[event]) - 1,
+		Id:   emitter.lastId + 1,
 		Func: handlerFunc,
 	}
 
 	emitter.events[event] = append(emitter.events[event], handler)
+	emitter.lastId += 1
 
 	return handler.Id
 }
