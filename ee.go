@@ -36,6 +36,27 @@ func (emitter *EventEmitter) On(event string, handlerFunc EventHandlerFunc) int 
 	return handler.Id
 }
 
+// Once subscribes handler to event and removes it after first execution
+// also removes event from map if handler was only one
+func (emitter *EventEmitter) Once(event string, handler EventHandlerFunc) {
+	id := -1
+
+	h := func(data ...any) {
+		handler(data...)
+
+		if id != -1 {
+			hasOneHandler := len(emitter.events[event]) == 1
+			if hasOneHandler {
+				emitter.Remove(event)
+			}
+
+			emitter.Off(event, id)
+		}
+	}
+
+	id = emitter.On(event, h)
+}
+
 // Emit calls all handlers subscribed to event and returns error if event doesn't exist in map
 func (emitter *EventEmitter) Emit(event string, data ...any) error {
 	handlers, ok := emitter.events[event]
